@@ -1,9 +1,10 @@
 # Unbeatables
 ## Resources: 
 
-https://blogg.kantega.no/webapp-with-create-react-app-and-spring-boot/
-https://spring.io/guides/gs/rest-service/
-https://reactjs.org/docs/getting-started.html
+- https://blogg.kantega.no/webapp-with-create-react-app-and-spring-boot/
+- https://start.spring.io/
+- https://spring.io/guides/gs/rest-service/
+- https://reactjs.org/docs/getting-started.html
 
 ## How to setup a development environment and run the project:
 
