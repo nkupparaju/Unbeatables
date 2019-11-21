@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import unbeatables from './unbeatables.jpg';
+import Keyboard from 'react-simple-keyboard';
+import hangman from './hangman.png'
 import './App.css';
+import 'react-simple-keyboard/build/css/index.css';
 
 class App extends Component {
 
@@ -8,15 +10,25 @@ class App extends Component {
         super(props);
         this.state = {
           message: "",
-          categories: [],
-          category: ""
+          category: "",
+          word: "",
+          lettersGuessed: []
         };
+    }
+
+    onKeyPress = (button) => {
+      console.log("Button pressed", button);
+      this.setState(state => {
+        const lettersGuessed = state.lettersGuessed.concat(button);
+        return {
+          lettersGuessed
+        };
+      });
     }
 
     componentDidMount() {
         setInterval(this.getServerTime, 250);
-        this.getCategories();
-        this.getRandomCategory();
+        this.getRandomCategoryAndWord();
     }
 
     getServerTime = () => {
@@ -27,33 +39,56 @@ class App extends Component {
             });
     }
 
-    getCategories = () => {
-      fetch("api/categories")
+    getRandomCategoryAndWord = () => {
+      fetch("api/getRandomCategoryAndWord")
             .then(response => response.text())
-            .then(categories => {
-              this.setState({categories: categories});
-            });
-    }
-
-    // TODO: update to api/word when backend logic has been updated with dictionary
-    getRandomCategory = () => {
-      fetch("api/category")
-            .then(response => response.text())
-            .then(category => {
+            .then(categoryAndWord => {
+              let response = JSON.parse(categoryAndWord);
+              let category = Object.keys(response)[0];
+              console.log("Category is: " + category);
               this.setState({category: category});
-            });
+              console.log("Word is: " + response[category]);
+              this.setState({word: response[category]});
+            })
     }
 
     render() {
         return (
           <div className="App">
             <header className="App-header">
-              <h1> Welcome to Unbeatables Hangman!</h1>
-              <img src={unbeatables} className="App-logo" />
-              <h3>List of word categories on the server: {this.state.categories}</h3>
-              <h3>Random category from the server: {this.state.category}</h3>
-              <h3>Time at the Java Rest API: {this.state.message}</h3>
+              <h4>Welcome to Unbeatables Hangman!</h4>
             </header>
+            <div className="Category-Section">
+              <p className="Category">Category: {this.state.category}</p>
+            </div>
+            <div className="Hangman-Section">
+              {/*TODO: we will want to alternate the picture based on how many wrong guesses
+                       a user has, i.e. hangman-1=HEAD, hangman-2=HEAD+BODY, etc
+                       will also need to append Letters Guessed
+               */}
+              <img src={hangman} alt="Hangman"/>
+            </div>
+            <div className="Letters-Guessed-Section">
+              <span className="Letters-Guessed">Letters guessed -> {this.state.lettersGuessed.join(", ")}</span>
+            </div>
+            <div className="Word-Section">
+              {/*TODO: replace with blanks from random word returned from server */}
+              Word: {this.state.word}
+            </div>
+            <div className="Keyboard">
+              <Keyboard
+                layout={{
+                  'default': [
+                    'Q W E R T Y U I O P',
+                    'A S D F G H J K L',
+                    'Z X C V B N M'
+                  ]
+                }}
+                onKeyPress={button =>
+                  this.onKeyPress(button)}
+                physicalKeyboardHighlight={true}
+              />
+            </div>
           </div>
         );
     }

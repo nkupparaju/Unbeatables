@@ -1,20 +1,37 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
+  background-color: #282c34;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  min-height: 5vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.Category {
+  color: red;
+  font-size: calc(12px + 2vmin);
+}
+
+.Hangman-Section {
+  text-align: center;
+}
+
+.Letters-Guessed, .Letters-Guessed-Section {
+  text-align: center;
+  color: white;
+  font-size: calc(9px + 1vmin);
+}
+
+.Word-Section {
+  color: white;
+  text-align: center;
+  padding-bottom: 20px;
+  font-size: 75px;
 }
 
 .App-link {
