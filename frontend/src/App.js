@@ -55,7 +55,7 @@ class App extends Component {
           this.setState({incorrectGuesses: this.state.incorrectGuesses += 1})
           if (this.state.incorrectGuesses == 6) {
             // TODO: replace with react bootstrap modal
-            if (window.confirm("Game Over!! Starting a new game in 5 seconds...")) {
+            if (window.confirm("Game Over!! Starting a new game...")) {
               setTimeout(window.location.reload(), 5000);
             }
             else {
