@@ -1,8 +1,18 @@
 import React, {Component} from 'react';
 import Keyboard from 'react-simple-keyboard';
-import hangman from './hangman.png'
 import './App.css';
 import 'react-simple-keyboard/build/css/index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+const IMAGES = {
+  hangman0: require('./images/hangman0.png'),
+  hangman1: require('./images/hangman1.png'),
+  hangman2: require('./images/hangman2.png'),
+  hangman3: require('./images/hangman3.png'),
+  hangman4: require('./images/hangman4.png'),
+  hangman5: require('./images/hangman5.png'),
+  hangman6: require('./images/hangman6.png')
+}
 
 class App extends Component {
 
@@ -11,22 +21,74 @@ class App extends Component {
         this.state = {
           message: "",
           category: "",
-          word: "",
-          lettersGuessed: []
+          blankedWord: [],
+          correctWord: "",
+          lettersGuessed: [],
+          incorrectGuesses: 0
         };
     }
 
-    onKeyPress = (button) => {
-      console.log("Button pressed", button);
-      this.setState(state => {
-        const lettersGuessed = state.lettersGuessed.concat(button);
-        return {
-          lettersGuessed
-        };
-      });
+    getHangmanImage = () => {
+      return IMAGES[this.state.incorrectGuesses];
     }
 
-    componentDidMount() {
+    checkIfLetterHasBeenGuessed = (letter) => {
+      if (this.state.lettersGuessed.includes(letter)) {
+        // TODO: replace with react bootstrap modal
+        alert(letter + " has been guessed already!");
+      }
+      else {
+        if (this.state.correctWord.includes(letter)) {
+          var indices = [];
+          var blankedWordCopy = this.state.blankedWord;
+          for (var i=0; i < this.state.correctWord.length; i++) {
+            if (this.state.correctWord[i] === letter) {
+              indices.push(i);
+            }
+          }
+          for (var i=0; i < indices.length; i++) {
+            blankedWordCopy[indices[i]] = letter;
+          }
+          this.setState({blankedWord: blankedWordCopy});
+          if (this.checkWinCondition()) {
+            // TODO: replace with react bootstrap modal
+            if (window.confirm("You won!! Starting a new game...")) {
+              window.location.reload();
+            }
+            else {
+              window.location.reload();
+            }
+          }
+        }
+        else {
+          this.setState({incorrectGuesses: this.state.incorrectGuesses += 1})
+          if (this.state.incorrectGuesses == 6) {
+            // TODO: replace with react bootstrap modal
+            if (window.confirm("Game Over!! Starting a new game...")) {
+              window.location.reload();
+            }
+            else {
+              window.location.reload();
+            }
+          }
+        }
+        this.setState(state => {
+          const lettersGuessed = state.lettersGuessed.concat(letter);
+          return {
+            lettersGuessed
+          };
+        });
+      }
+    }
+
+    checkWinCondition = () => {
+      if (!this.state.blankedWord.includes("_")) {
+        return true;
+      }
+      return false;
+    }
+
+    componentDidMount = () => {
         setInterval(this.getServerTime, 250);
         this.getRandomCategoryAndWord();
     }
@@ -48,8 +110,17 @@ class App extends Component {
               console.log("Category is: " + category);
               this.setState({category: category});
               console.log("Word is: " + response[category]);
-              this.setState({word: response[category]});
+              this.setState({correctWord: response[category]});
+              this.blankWord(response[category]);
             })
+    }
+
+    blankWord = (word) => {
+      var blankedWordArray = [];
+      for (var i = 0; i < word.length; i++) {
+        blankedWordArray[i] = "_";
+      }
+      this.setState({blankedWord: blankedWordArray});
     }
 
     render() {
@@ -59,21 +130,18 @@ class App extends Component {
               <h4>Welcome to Unbeatables Hangman!</h4>
             </header>
             <div className="Category-Section">
-              <p className="Category">Category: {this.state.category}</p>
+              <p className="Category">Category: <b>{this.state.category}</b></p>
+              <p className="GuessesRemaining">Guesses Remaining: {6 - this.state.incorrectGuesses}</p>
+              <p className="IncorrectGuesses">Incorrect Guesses: {this.state.incorrectGuesses}</p>
             </div>
             <div className="Hangman-Section">
-              {/*TODO: we will want to alternate the picture based on how many wrong guesses
-                       a user has, i.e. hangman-1=HEAD, hangman-2=HEAD+BODY, etc
-                       will also need to append Letters Guessed
-               */}
-              <img src={hangman} alt="Hangman"/>
+              <img src={IMAGES['hangman' + this.state.incorrectGuesses]} alt="Hangman"/>
             </div>
             <div className="Letters-Guessed-Section">
               <span className="Letters-Guessed">Letters guessed -> {this.state.lettersGuessed.join(", ")}</span>
             </div>
             <div className="Word-Section">
-              {/*TODO: replace with blanks from random word returned from server */}
-              Word: {this.state.word}
+              Word: {this.state.blankedWord.join(' ')}
             </div>
             <div className="Keyboard">
               <Keyboard
@@ -84,9 +152,10 @@ class App extends Component {
                     'Z X C V B N M'
                   ]
                 }}
-                onKeyPress={button =>
-                  this.onKeyPress(button)}
+                onKeyReleased={button =>
+                  this.checkIfLetterHasBeenGuessed(button)}
                 physicalKeyboardHighlight={true}
+                physicalKeyboardHighlightBgColor={"#09d3ac"}
               />
             </div>
           </div>

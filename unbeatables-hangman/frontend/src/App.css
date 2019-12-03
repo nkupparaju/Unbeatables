@@ -13,8 +13,13 @@
 }
 
 .Category {
-  color: red;
+  color: green;
   font-size: calc(12px + 2vmin);
+}
+
+.IncorrectGuesses, .GuessesRemaining {
+  color: red;
+  font-size: calc(8px + 2vmin);
 }
 
 .Hangman-Section {
