@@ -50,25 +50,16 @@ class App extends Component {
             blankedWordCopy[indices[i]] = letter;
           }
           this.setState({blankedWord: blankedWordCopy});
-          if (this.checkWinCondition()) {
-            // TODO: replace with react bootstrap modal
-            if (window.confirm("You won!! Starting a new game...")) {
-              window.location.reload();
-            }
-            else {
-              window.location.reload();
-            }
-          }
         }
         else {
           this.setState({incorrectGuesses: this.state.incorrectGuesses += 1})
           if (this.state.incorrectGuesses == 6) {
             // TODO: replace with react bootstrap modal
-            if (window.confirm("Game Over!! Starting a new game...")) {
-              window.location.reload();
+            if (window.confirm("Game Over!! Starting a new game in 5 seconds...")) {
+              setTimeout(window.location.reload(), 5000);
             }
             else {
-              window.location.reload();
+              setTimeout(window.location.reload(), 5000);
             }
           }
         }
@@ -78,6 +69,15 @@ class App extends Component {
             lettersGuessed
           };
         });
+        if (this.checkWinCondition()) {
+          // TODO: replace with react bootstrap modal
+          if (window.confirm("You won!! Starting a new game...")) {
+            window.location.reload();
+          }
+          else {
+            window.location.reload();
+          }
+        }
       }
     }
 
