@@ -1,3 +1,13 @@
+#outter {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+#inner_remaining {
+  flex-grow: 1;
+}
+
 .App {
   background-color: #282c34;
 }

@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/hangman-1.0.0-SNAPSHOT.jar
+web: java -Dserver.port=$PORT -jar target/hangman-1.0.0-SNAPSHOT.jar
