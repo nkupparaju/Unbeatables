@@ -1,15 +1,18 @@
-#outter {
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background-color: #282c34;
+}
+
+#root {
   display: flex;
   flex-flow: column;
   height: 100%;
 }
 
-#inner_remaining {
-  flex-grow: 1;
-}
-
 .App {
-  background-color: #282c34;
+  flex: 0 1 auto;
 }
 
 .App-header {
@@ -18,7 +21,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(16px + 2vmin);
   color: white;
 }
 
@@ -27,9 +30,10 @@
   font-size: calc(12px + 2vmin);
 }
 
-.IncorrectGuesses, .GuessesRemaining {
+.IncorrectGuesses, 
+.GuessesRemaining {
   color: red;
-  font-size: calc(8px + 2vmin);
+  font-size: calc(8px + 1vmin);
 }
 
 .Hangman-Section {
@@ -45,10 +49,9 @@
 .Word-Section {
   color: white;
   text-align: center;
-  padding-bottom: 20px;
   font-size: 75px;
 }
 
-.App-link {
-  color: #09d3ac;
+.Keyboard {
+  flex: 1 1 auto;
 }

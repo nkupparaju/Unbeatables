@@ -21,7 +21,6 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          message: "",
           category: "",
           blankedWord: [],
           correctWord: "",
@@ -30,7 +29,8 @@ class App extends Component {
           shouldShowWinModal: false,
           shouldShowLetterGuessedModal: false,
           shouldShowLoseModal: false,
-          previousLetterGuessed: ""
+          previousLetterGuessed: "",
+          serverTime: ""
         };
     }
 
@@ -90,8 +90,8 @@ class App extends Component {
     getServerTime = () => {
         fetch('/api/time')
             .then(response => response.text())
-            .then(message => {
-                this.setState({message: message});
+            .then(serverTime => {
+                this.setState({serverTime: serverTime});
             });
     }
 
@@ -144,42 +144,38 @@ class App extends Component {
     render() {
         return (
           <>
-            <div id="outter">
-              <div className="App">
-                <header className="App-header">
-                  <h4>Welcome to Unbeatables Hangman!</h4>
-                </header>
-                <div className="Category-Section">
-                  <p className="Category">Category: <b>{this.state.category}</b></p>
-                  <p className="GuessesRemaining">Guesses Remaining: {6 - this.state.incorrectGuesses}</p>
-                  <p className="IncorrectGuesses">Incorrect Guesses: {this.state.incorrectGuesses}</p>
-                </div>
-                <div className="Hangman-Section">
-                  <img src={IMAGES['hangman' + this.state.incorrectGuesses]} alt="Hangman"/>
-                </div>
-                <div className="Letters-Guessed-Section">
-                  <span className="Letters-Guessed">Letters guessed -> {this.state.lettersGuessed.join(", ")}</span>
-                </div>
-                <div className="Word-Section">
-                  Word: {this.state.blankedWord.join(' ')}
-                </div>
-                <div className="Keyboard">
-                  <Keyboard
-                    layout={{
-                      'default': [
-                        'Q W E R T Y U I O P',
-                        'A S D F G H J K L',
-                        'Z X C V B N M'
-                      ]
-                    }}
-                    onKeyReleased={button =>
-                      this.checkIfLetterHasBeenGuessed(button)}
-                    physicalKeyboardHighlight={true}
-                    physicalKeyboardHighlightBgColor={"#09d3ac"}
-                  />
-                </div>
+            <div className="App">
+              <header className="App-header">
+                <h2><b>Welcome to Unbeatables Hangman!</b></h2>
+                <h5>Time at the server is: {this.state.serverTime}</h5>
+              </header>
+              <div className="Category-Section">
+                <p className="Category">Category: <b>{this.state.category}</b></p>
+                <p className="GuessesRemaining">Guesses Remaining: {6 - this.state.incorrectGuesses}</p>
+                <p className="IncorrectGuesses">Incorrect Guesses: {this.state.incorrectGuesses}</p>
               </div>
-              <div id="inner_remaining" />
+              <div className="Hangman-Section">
+                <img src={IMAGES['hangman' + this.state.incorrectGuesses]} alt="Hangman"/>
+              </div>
+              <div className="Letters-Guessed-Section">
+                <span className="Letters-Guessed">Letters guessed -> {this.state.lettersGuessed.join(", ")}</span>
+              </div>
+              <div className="Word-Section">
+                Word: {this.state.blankedWord.join(' ')}
+              </div>
+            </div>
+            <div className="Keyboard">
+              <Keyboard
+                layout={{
+                  'default': [
+                    'Q W E R T Y U I O P',
+                    'A S D F G H J K L',
+                    'Z X C V B N M'
+                  ]
+                }}
+                onKeyReleased={button =>
+                  this.checkIfLetterHasBeenGuessed(button)}
+              />
             </div>
 
             <Modal 
