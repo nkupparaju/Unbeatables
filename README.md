@@ -17,3 +17,8 @@
 6. Run "mvn clean publish" from command line (Will take a while on initial run to download dependencies and run a front-end production build).
 7. Run "java -jar target\hangman-1.0.0-SNAPSHOT.jar" from command line
 8. Visit http://localhost:8080/ and [you should see the application in your browser](https://imgur.com/QtuRtVJ)
+
+## Deployed version
+
+Our project is hosted on Heroku at the URL:
+https://unbeatables-hangman.herokuapp.com/
